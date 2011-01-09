@@ -3,16 +3,17 @@ package main
 import(
 	"http"
 	"io"
+	"log"
 )
 
-func HelloServer(c *http.Conn, req *http.Request) {
-	io.WriteString(c, "Hello world!");
+func HelloServer(w http.ResponseWriter, req *http.Request) {
+	io.WriteString(w, "Hello world!\n")
 }
 
 func main() {
-	http.Handle("/", http.HandlerFunc(HelloServer))
+	http.HandleFunc("/", HelloServer)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
-		panic("ListenAndServe: " + err.String())
+		log.Exit("ListenAndServe: ", err.String())
 	}
 }
